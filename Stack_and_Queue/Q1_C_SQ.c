@@ -11,23 +11,19 @@ Purpose: Implementing the required functions for Question 1 */
 
 //////////////////////////////////////////////////////////////////////////////////
 
-typedef struct _listnode
-{
+typedef struct _listnode {
 	int item;
 	struct _listnode *next;
-} ListNode;	// You should not change the definition of ListNode
+} ListNode; // You should not change the definition of ListNode
 
-typedef struct _linkedlist
-{
+typedef struct _linkedlist {
 	int size;
 	ListNode *head;
-} LinkedList;	// You should not change the definition of LinkedList
+} LinkedList; // You should not change the definition of LinkedList
 
-
-typedef struct _queue
-{
+typedef struct _queue {
 	LinkedList ll;
-} Queue;  // You should not change the definition of Queue
+} Queue; // You should not change the definition of Queue
 
 ///////////////////////// function prototypes ////////////////////////////////////
 
@@ -41,15 +37,14 @@ int isEmptyQueue(Queue *q);
 void removeAllItemsFromQueue(Queue *q);
 
 void printList(LinkedList *ll);
-ListNode * findNode(LinkedList *ll, int index);
+ListNode *findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
 void removeAllItems(LinkedList *ll);
 
 //////////////////////////// main() //////////////////////////////////////////////
 
-int main()
-{
+int main() {
 	int c, i;
 	LinkedList ll;
 	Queue q;
@@ -64,20 +59,16 @@ int main()
 	q.ll.head = NULL;
 	q.ll.size = 0;
 
-
 	printf("1: Insert an integer into the linked list:\n");
 	printf("2: Create the queue from the linked list:\n");
 	printf("3: Remove odd numbers from the queue:\n");
 	printf("0: Quit:\n");
 
-
-	while (c != 0)
-	{
+	while (c != 0) {
 		printf("Please input your choice(1/2/3/0): ");
 		scanf("%d", &c);
 
-		switch (c)
-		{
+		switch (c) {
 		case 1:
 			printf("Input an integer that you want to insert into the List: ");
 			scanf("%d", &i);
@@ -105,23 +96,45 @@ int main()
 			printf("Choice unknown;\n");
 			break;
 		}
-
 	}
 
 	return 0;
 }
 
-
 //////////////////////////////////////////////////////////////////////////////////
 
-void createQueueFromLinkedList(LinkedList *ll, Queue *q)
-{
+void createQueueFromLinkedList(LinkedList *ll, Queue *q) {
 	/* add your code here */
+	ListNode *cur_node = ll->head;
+	while (cur_node) {
+		enqueue(q, cur_node->item);
+		cur_node = cur_node->next;
+	}
 }
 
-void removeOddValues(Queue *q)
-{
+void deleteNextNode(ListNode **prenext) {
+	if (*prenext == NULL) {
+		return;
+	}
+	ListNode *new_next = (*prenext)->next;
+	free(*prenext);
+	*prenext = new_next;
+	return;
+}
+
+void removeOddValues(Queue *q) {
 	/* add your code here */
+	int removecnt = 0;
+	ListNode **prenext = &(q->ll.head);
+	while (*prenext) {
+		if ((((*prenext)->item) & 1) == 0) {
+			prenext = &((*prenext)->next);
+			continue;
+		}
+		deleteNextNode(prenext);
+		removecnt++;
+	}
+	q->ll.size -= removecnt;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -147,8 +160,7 @@ int isEmptyQueue(Queue *q) {
 	return 0;
 }
 
-void removeAllItemsFromQueue(Queue *q)
-{
+void removeAllItemsFromQueue(Queue *q) {
 	int count, i;
 	if (q == NULL)
 		return;
@@ -158,8 +170,7 @@ void removeAllItemsFromQueue(Queue *q)
 		dequeue(q);
 }
 
-
-void printList(LinkedList *ll){
+void printList(LinkedList *ll) {
 
 	ListNode *cur;
 	if (ll == NULL)
@@ -167,21 +178,18 @@ void printList(LinkedList *ll){
 	cur = ll->head;
 	if (cur == NULL)
 		printf("Empty");
-	while (cur != NULL)
-	{
+	while (cur != NULL) {
 		printf("%d ", cur->item);
 		cur = cur->next;
 	}
 	printf("\n");
 }
 
-
-void removeAllItems(LinkedList *ll)
-{
+void removeAllItems(LinkedList *ll) {
 	ListNode *cur = ll->head;
 	ListNode *tmp;
 
-	while (cur != NULL){
+	while (cur != NULL) {
 		tmp = cur->next;
 		free(cur);
 		cur = tmp;
@@ -190,8 +198,7 @@ void removeAllItems(LinkedList *ll)
 	ll->size = 0;
 }
 
-
-ListNode * findNode(LinkedList *ll, int index){
+ListNode *findNode(LinkedList *ll, int index) {
 
 	ListNode *temp;
 
@@ -203,7 +210,7 @@ ListNode * findNode(LinkedList *ll, int index){
 	if (temp == NULL || index < 0)
 		return NULL;
 
-	while (index > 0){
+	while (index > 0) {
 		temp = temp->next;
 		if (temp == NULL)
 			return NULL;
@@ -213,7 +220,7 @@ ListNode * findNode(LinkedList *ll, int index){
 	return temp;
 }
 
-int insertNode(LinkedList *ll, int index, int value){
+int insertNode(LinkedList *ll, int index, int value) {
 
 	ListNode *pre, *cur;
 
@@ -221,11 +228,10 @@ int insertNode(LinkedList *ll, int index, int value){
 		return -1;
 
 	// If empty list or inserting first node, need to update head pointer
-	if (ll->head == NULL || index == 0){
+	if (ll->head == NULL || index == 0) {
 		cur = ll->head;
 		ll->head = malloc(sizeof(ListNode));
-		if (ll->head == NULL)
-		{
+		if (ll->head == NULL) {
 			exit(0);
 		}
 		ll->head->item = value;
@@ -234,14 +240,12 @@ int insertNode(LinkedList *ll, int index, int value){
 		return 0;
 	}
 
-
 	// Find the nodes before and at the target position
 	// Create a new node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
+	if ((pre = findNode(ll, index - 1)) != NULL) {
 		cur = pre->next;
 		pre->next = malloc(sizeof(ListNode));
-		if (pre->next == NULL)
-		{
+		if (pre->next == NULL) {
 			exit(0);
 		}
 		pre->next->item = value;
@@ -253,8 +257,7 @@ int insertNode(LinkedList *ll, int index, int value){
 	return -1;
 }
 
-
-int removeNode(LinkedList *ll, int index){
+int removeNode(LinkedList *ll, int index) {
 
 	ListNode *pre, *cur;
 
@@ -263,7 +266,7 @@ int removeNode(LinkedList *ll, int index){
 		return -1;
 
 	// If removing first node, need to update head pointer
-	if (index == 0){
+	if (index == 0) {
 		cur = ll->head->next;
 		free(ll->head);
 		ll->head = cur;
@@ -273,7 +276,7 @@ int removeNode(LinkedList *ll, int index){
 
 	// Find the nodes before and after the target position
 	// Free the target node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
+	if ((pre = findNode(ll, index - 1)) != NULL) {
 
 		if (pre->next == NULL)
 			return -1;
