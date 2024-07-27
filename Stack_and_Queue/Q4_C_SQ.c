@@ -106,17 +106,19 @@ int main() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void recursiveReverse(Queue *q) {
-	if (isEmptyQueue(q))
-		return;
-	int val = dequeue(q);
-	recursiveReverse(q);
-	enqueue(q, val);
-}
-
 void reverse(Queue *q) {
 	/* add your code here */
-	recursiveReverse(q);
+	Stack s;
+	s.ll.head = NULL;
+	s.ll.size = 0;
+	s.ll.tail = NULL;
+	int val;
+	while (!isEmptyQueue(q)) {
+		push(&s, dequeue(q));
+	}
+	while (!isEmptyStack(&s)) {
+		enqueue(q, pop(&s));
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
