@@ -6,26 +6,26 @@ Purpose: Implementing the required functions for Question 3 */
 
 //////////////////////////////////////////////////////////////////////////////////
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <limits.h>
 
 //////////////////////////////////   linked list /////////////////////////////////
 
-typedef struct _listnode{
-   int item;
-   struct _listnode *next;
+typedef struct _listnode {
+	int item;
+	struct _listnode *next;
 } ListNode;
 
-typedef struct _linkedlist{
-   int size;
-   ListNode *head;
-   ListNode *tail;
+typedef struct _linkedlist {
+	int size;
+	ListNode *head;
+	ListNode *tail;
 } LinkedList;
 
 ////////////////////////////////// stack //////////////////////////////////////////
 
-typedef struct stack{
+typedef struct stack {
 	LinkedList ll;
 } Stack;
 
@@ -40,53 +40,48 @@ int peek(Stack *s);
 int isEmptyStack(Stack *s);
 
 void printList(LinkedList *ll);
-ListNode * findNode(LinkedList *ll, int index);
+ListNode *findNode(LinkedList *ll, int index);
 int insertNode(LinkedList *ll, int index, int value);
 int removeNode(LinkedList *ll, int index);
 void removeAllItems(LinkedList *ll);
 
 //////////////////////////////////////////////////////////////////////////////////////
 
-int main()
-{
-    int c, value;
+int main() {
+	int c, value;
 
-    Stack s;
+	Stack s;
 
-    s.ll.head=NULL;
-	s.ll.size =0;
-	s.ll.tail =NULL;
+	s.ll.head = NULL;
+	s.ll.size = 0;
+	s.ll.tail = NULL;
 
-    c =1;
+	c = 1;
 
-    printf("1: Insert an integer into the stack:\n");
-    printf("2: Check the stack is pairwise consecutive:\n");
-    printf("0: Quit:\n");
+	printf("1: Insert an integer into the stack:\n");
+	printf("2: Check the stack is pairwise consecutive:\n");
+	printf("0: Quit:\n");
 
-    while (c != 0)
-	{
+	while (c != 0) {
 		printf("Please input your choice(1/2/0): ");
 		scanf("%d", &c);
 
-		switch (c)
-		{
+		switch (c) {
 		case 1:
 			printf("Input an integer that you want to insert into the stack: ");
 			scanf("%d", &value);
 			push(&s, value);
 			printf("The stack is: ");
-            printList(&(s.ll));
+			printList(&(s.ll));
 			break;
 		case 2:
-            if(isStackPairwiseConsecutive(&s))
-            {
-                printf("The stack is pairwise consecutive.\n");
-            }
-            else{
-                printf("The stack is not pairwise consecutive.\n");
-            }
-            removeAllItems(&(s.ll));
-            break;
+			if (isStackPairwiseConsecutive(&s)) {
+				printf("The stack is pairwise consecutive.\n");
+			} else {
+				printf("The stack is not pairwise consecutive.\n");
+			}
+			removeAllItems(&(s.ll));
+			break;
 		case 0:
 			removeAllItems(&(s.ll));
 			break;
@@ -96,45 +91,56 @@ int main()
 		}
 	}
 
-    return 0;
+	return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
-int isStackPairwiseConsecutive(Stack *s)
-{
-  /* add your code here */
+int isStackPairwiseConsecutive(Stack *s) {
+	/* add your code here */
+	if (s->ll.size & 1) {
+		return 0;
+	}
+	int first, second;
+	while (!isEmptyStack(s)) {
+		first = pop(s);
+		second = pop(s);
+		if (first - second != 1) {
+			return 0;
+		}
+	}
+	return 1;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void push(Stack *s, int item){
-   insertNode(&(s->ll), 0, item);
+void push(Stack *s, int item) {
+	insertNode(&(s->ll), 0, item);
 }
 
-int pop(Stack *s){
-   int item;
-   if(!isEmptyStack(s)){
-    item = ((s->ll).head)->item;
-    removeNode(&(s->ll), 0);
-    return item;
-   }
-    return INT_MIN;
+int pop(Stack *s) {
+	int item;
+	if (!isEmptyStack(s)) {
+		item = ((s->ll).head)->item;
+		removeNode(&(s->ll), 0);
+		return item;
+	}
+	return INT_MIN;
 }
 
-int peek(Stack *s){
-   return ((s->ll).head)->item;
+int peek(Stack *s) {
+	return ((s->ll).head)->item;
 }
 
-int isEmptyStack(Stack *s){
-   if ((s->ll).size == 0)
-      return 1;
-   return 0;
+int isEmptyStack(Stack *s) {
+	if ((s->ll).size == 0)
+		return 1;
+	return 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void printList(LinkedList *ll){
+void printList(LinkedList *ll) {
 
 	ListNode *cur;
 	if (ll == NULL)
@@ -143,15 +149,14 @@ void printList(LinkedList *ll){
 
 	if (cur == NULL)
 		printf("Empty");
-	while (cur != NULL)
-	{
+	while (cur != NULL) {
 		printf("%d ", cur->item);
 		cur = cur->next;
 	}
 	printf("\n");
 }
 
-ListNode * findNode(LinkedList *ll, int index){
+ListNode *findNode(LinkedList *ll, int index) {
 
 	ListNode *temp;
 
@@ -163,7 +168,7 @@ ListNode * findNode(LinkedList *ll, int index){
 	if (temp == NULL || index < 0)
 		return NULL;
 
-	while (index > 0){
+	while (index > 0) {
 		temp = temp->next;
 		if (temp == NULL)
 			return NULL;
@@ -173,7 +178,7 @@ ListNode * findNode(LinkedList *ll, int index){
 	return temp;
 }
 
-int insertNode(LinkedList *ll, int index, int value){
+int insertNode(LinkedList *ll, int index, int value) {
 
 	ListNode *pre, *cur;
 
@@ -181,7 +186,7 @@ int insertNode(LinkedList *ll, int index, int value){
 		return -1;
 
 	// If empty list or inserting first node, need to update head pointer
-	if (ll->head == NULL || index == 0){
+	if (ll->head == NULL || index == 0) {
 		cur = ll->head;
 		ll->head = malloc(sizeof(ListNode));
 		ll->head->item = value;
@@ -190,10 +195,9 @@ int insertNode(LinkedList *ll, int index, int value){
 		return 0;
 	}
 
-
 	// Find the nodes before and at the target position
 	// Create a new node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
+	if ((pre = findNode(ll, index - 1)) != NULL) {
 		cur = pre->next;
 		pre->next = malloc(sizeof(ListNode));
 		pre->next->item = value;
@@ -205,8 +209,7 @@ int insertNode(LinkedList *ll, int index, int value){
 	return -1;
 }
 
-
-int removeNode(LinkedList *ll, int index){
+int removeNode(LinkedList *ll, int index) {
 
 	ListNode *pre, *cur;
 
@@ -215,7 +218,7 @@ int removeNode(LinkedList *ll, int index){
 		return -1;
 
 	// If removing first node, need to update head pointer
-	if (index == 0){
+	if (index == 0) {
 		cur = ll->head->next;
 		free(ll->head);
 		ll->head = cur;
@@ -226,7 +229,7 @@ int removeNode(LinkedList *ll, int index){
 
 	// Find the nodes before and after the target position
 	// Free the target node and reconnect the links
-	if ((pre = findNode(ll, index - 1)) != NULL){
+	if ((pre = findNode(ll, index - 1)) != NULL) {
 
 		if (pre->next == NULL)
 			return -1;
@@ -241,12 +244,11 @@ int removeNode(LinkedList *ll, int index){
 	return -1;
 }
 
-void removeAllItems(LinkedList *ll)
-{
+void removeAllItems(LinkedList *ll) {
 	ListNode *cur = ll->head;
 	ListNode *tmp;
 
-	while (cur != NULL){
+	while (cur != NULL) {
 		tmp = cur->next;
 		free(cur);
 		cur = tmp;
