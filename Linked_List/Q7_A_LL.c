@@ -77,21 +77,19 @@ int main() {
 
 ////////////////////////////////////////////////////////////////////////
 
-ListNode **RecursiveSwitch(ListNode *cur_node, ListNode **ptrHead) {
-	if (cur_node->next == NULL) {
-		*ptrHead = cur_node;
-		return &(cur_node->next);
-	}
-	ListNode **prenext = RecursiveSwitch(cur_node->next, ptrHead);
-	*prenext = cur_node;
-	return &(cur_node->next);
-}
 void RecursiveReverse(ListNode **ptrHead) {
 	/* add your code here */
-	if (*ptrHead == NULL) {
+	if (!ptrHead || !(*ptrHead)) {
 		return;
 	}
-	*RecursiveSwitch(*ptrHead, ptrHead) = NULL;
+	if (!(*ptrHead)->next) {
+		return;
+	}
+	ListNode *cur_node = *ptrHead;
+	*ptrHead = (*ptrHead)->next;
+	RecursiveReverse(ptrHead);
+	cur_node->next->next = cur_node;
+	cur_node->next = NULL;
 }
 
 //////////////////////////////////////////////////////////////////////////////////
