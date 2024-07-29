@@ -13,23 +13,21 @@ Purpose: Implementing the required functions for Question 1 */
 #define BUFFER_SIZE 1024
 ///////////////////////////////////////////////////////////////////////////////////
 
-typedef struct _bstnode{
+typedef struct _bstnode {
 	int item;
 	struct _bstnode *left;
 	struct _bstnode *right;
-} BSTNode;   // You should not change the definition of BSTNode
+} BSTNode; // You should not change the definition of BSTNode
 
 typedef struct _QueueNode {
 	BSTNode *data;
 	struct _QueueNode *nextPtr;
-}QueueNode; // You should not change the definition of QueueNode
+} QueueNode; // You should not change the definition of QueueNode
 
-
-typedef struct _queue
-{
+typedef struct _queue {
 	QueueNode *head;
 	QueueNode *tail;
-}Queue; // You should not change the definition of queue
+} Queue; // You should not change the definition of queue
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -38,19 +36,18 @@ void levelOrderTraversal(BSTNode *node);
 
 void insertBSTNode(BSTNode **node, int value);
 
-BSTNode* dequeue(QueueNode **head, QueueNode **tail);
+BSTNode *dequeue(QueueNode **head, QueueNode **tail);
 void enqueue(QueueNode **head, QueueNode **tail, BSTNode *node);
 int isEmpty(QueueNode *head);
 void removeAll(BSTNode **node);
 
 ///////////////////////////// main() /////////////////////////////////////////////
 
-int main()
-{
+int main() {
 	int c, i;
 	c = 1;
 
-	//Initialize the Binary Search Tree as an empty Binary Search Tree
+	// Initialize the Binary Search Tree as an empty Binary Search Tree
 	BSTNode *root;
 	root = NULL;
 
@@ -58,14 +55,11 @@ int main()
 	printf("2: Print the level-order traversal of the binary search tree;\n");
 	printf("0: Quit;\n");
 
-
-	while (c != 0)
-	{
+	while (c != 0) {
 		printf("Please input your choice(1/2/0): ");
 		scanf("%d", &c);
 
-		switch (c)
-		{
+		switch (c) {
 		case 1:
 			printf("Input an integer that you want to insert into the Binary Search Tree: ");
 			scanf("%d", &i);
@@ -83,7 +77,6 @@ int main()
 			printf("Choice unknown;\n");
 			break;
 		}
-
 	}
 
 	return 0;
@@ -91,17 +84,29 @@ int main()
 
 //////////////////////////////////////////////////////////////////////////////////
 
-void levelOrderTraversal(BSTNode* root)
-{
-
-    /* add your code here */
+void levelOrderTraversal(BSTNode *root) {
+	/* add your code here */
+	if (!root)
+		return;
+	Queue q;
+	BSTNode *cur_node;
+	q.head = NULL;
+	q.tail = NULL;
+	enqueue(&q.head, &q.tail, root);
+	while (!isEmpty(q.head)) {
+		cur_node = dequeue(&q.head, &q.tail);
+		if (!cur_node)
+			continue;
+		printf("%d ", cur_node->item);
+		enqueue(&q.head, &q.tail, cur_node->left);
+		enqueue(&q.head, &q.tail, cur_node->right);
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-void insertBSTNode(BSTNode **node, int value){
-	if (*node == NULL)
-	{
+void insertBSTNode(BSTNode **node, int value) {
+	if (*node == NULL) {
 		*node = malloc(sizeof(BSTNode));
 
 		if (*node != NULL) {
@@ -109,18 +114,12 @@ void insertBSTNode(BSTNode **node, int value){
 			(*node)->left = NULL;
 			(*node)->right = NULL;
 		}
-	}
-	else
-	{
-		if (value < (*node)->item)
-		{
+	} else {
+		if (value < (*node)->item) {
 			insertBSTNode(&((*node)->left), value);
-		}
-		else if (value >(*node)->item)
-		{
+		} else if (value > (*node)->item) {
 			insertBSTNode(&((*node)->right), value);
-		}
-		else
+		} else
 			return;
 	}
 }
@@ -128,8 +127,7 @@ void insertBSTNode(BSTNode **node, int value){
 //////////////////////////////////////////////////////////////////////////////////
 
 // enqueue node
-void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
-{
+void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node) {
 	// dynamically allocate memory
 	QueueNode *newPtr = malloc(sizeof(QueueNode));
 
@@ -141,20 +139,17 @@ void enqueue(QueueNode **headPtr, QueueNode **tailPtr, BSTNode *node)
 		// if queue is empty, insert at head
 		if (isEmpty(*headPtr)) {
 			*headPtr = newPtr;
-		}
-		else { // insert at tail
+		} else { // insert at tail
 			(*tailPtr)->nextPtr = newPtr;
 		}
 
 		*tailPtr = newPtr;
-	}
-	else {
+	} else {
 		printf("Node not inserted");
 	}
 }
 
-BSTNode* dequeue(QueueNode **headPtr, QueueNode **tailPtr)
-{
+BSTNode *dequeue(QueueNode **headPtr, QueueNode **tailPtr) {
 	BSTNode *node = (*headPtr)->data;
 	QueueNode *tempPtr = *headPtr;
 	*headPtr = (*headPtr)->nextPtr;
@@ -168,15 +163,12 @@ BSTNode* dequeue(QueueNode **headPtr, QueueNode **tailPtr)
 	return node;
 }
 
-int isEmpty(QueueNode *head)
-{
+int isEmpty(QueueNode *head) {
 	return head == NULL;
 }
 
-void removeAll(BSTNode **node)
-{
-	if (*node != NULL)
-	{
+void removeAll(BSTNode **node) {
+	if (*node != NULL) {
 		removeAll(&((*node)->left));
 		removeAll(&((*node)->right));
 		free(*node);
