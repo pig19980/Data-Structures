@@ -14,12 +14,12 @@ Purpose: Implementing the required functions for Question 2 */
 typedef struct _listnode {
 	int item;
 	struct _listnode *next;
-} ListNode;	 // You should not change the definition of ListNode
+} ListNode; // You should not change the definition of ListNode
 
 typedef struct _linkedlist {
 	int size;
 	ListNode *head;
-} LinkedList;  // You should not change the definition of LinkedList
+} LinkedList; // You should not change the definition of LinkedList
 
 //////////////////////// function prototypes /////////////////////////////////////
 
@@ -56,37 +56,37 @@ int main() {
 		scanf("%d", &c);
 
 		switch (c) {
-			case 1:
-				printf("Input an integer that you want to add to the linked list 1: ");
-				scanf("%d", &i);
-				j = insertNode(&ll1, ll1.size, i);
-				printf("Linked list 1: ");
-				printList(&ll1);
-				break;
-			case 2:
-				printf("Input an integer that you want to add to the linked list 2: ");
-				scanf("%d", &i);
-				j = insertNode(&ll2, ll2.size, i);
-				printf("Linked list 2: ");
-				printList(&ll2);
-				break;
-			case 3:
-				printf("The resulting linked lists after merging the given linked list are:\n");
-				alternateMergeLinkedList(&ll1, &ll2);  // You need to code this function
-				printf("The resulting linked list 1: ");
-				printList(&ll1);
-				printf("The resulting linked list 2: ");
-				printList(&ll2);
-				removeAllItems(&ll1);
-				removeAllItems(&ll2);
-				break;
-			case 0:
-				removeAllItems(&ll1);
-				removeAllItems(&ll2);
-				break;
-			default:
-				printf("Choice unknown;\n");
-				break;
+		case 1:
+			printf("Input an integer that you want to add to the linked list 1: ");
+			scanf("%d", &i);
+			j = insertNode(&ll1, ll1.size, i);
+			printf("Linked list 1: ");
+			printList(&ll1);
+			break;
+		case 2:
+			printf("Input an integer that you want to add to the linked list 2: ");
+			scanf("%d", &i);
+			j = insertNode(&ll2, ll2.size, i);
+			printf("Linked list 2: ");
+			printList(&ll2);
+			break;
+		case 3:
+			printf("The resulting linked lists after merging the given linked list are:\n");
+			alternateMergeLinkedList(&ll1, &ll2); // You need to code this function
+			printf("The resulting linked list 1: ");
+			printList(&ll1);
+			printf("The resulting linked list 2: ");
+			printList(&ll2);
+			removeAllItems(&ll1);
+			removeAllItems(&ll2);
+			break;
+		case 0:
+			removeAllItems(&ll1);
+			removeAllItems(&ll2);
+			break;
+		default:
+			printf("Choice unknown;\n");
+			break;
 		}
 	}
 	return 0;
